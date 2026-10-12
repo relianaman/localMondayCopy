@@ -1,149 +1,119 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Task Manager</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="script.js" defer></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Student Task Manager</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
+<div class="shell">
 
-    <header class="header">
-        <div class="container header-content">
-            <div>
-                <h1>Student Task Manager</h1>
-                <p>Organize your studies. Stay on track.</p>
-            </div>
-            <span class="header-icon">📚</span>
+  <header class="masthead">
+    <div>
+      <h1>Student Task Manager</h1>
+      <p>Capture it, rank it, finish it.</p>
+    </div>
+    <div class="progress" aria-live="polite">
+      <div class="progress-row">
+        <span id="progressText">0 of 0 done</span>
+        <span id="overdueText"></span>
+      </div>
+      <div class="bar" role="progressbar" aria-label="Tasks completed" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progressBar"><i id="progressFill"></i></div>
+    </div>
+  </header>
+
+  <div class="layout">
+
+    <!-- Form -->
+    <section class="panel panel-form" aria-labelledby="formTitle">
+      <h2 id="formTitle">Add a task</h2>
+      <p class="editing-note" id="editingNote" hidden>You are editing a task. Save changes or cancel to go back.</p>
+
+      <form id="taskForm" novalidate>
+        <div class="field">
+          <label for="title">Title</label>
+          <input class="input" id="title" name="title" type="text" maxlength="80" autocomplete="off" placeholder="e.g. Finish physics lab report" aria-describedby="titleError">
+          <p class="error" id="titleError" role="alert" hidden></p>
         </div>
-    </header>
 
-    <main class="container">
+        <div class="field">
+          <label for="description">Description <span class="hint">(optional)</span></label>
+          <textarea class="input" id="description" name="description" maxlength="300" placeholder="Chapters, page numbers, what to submit"></textarea>
+          <div class="counter" id="descCounter" aria-hidden="true">0 / 300</div>
+        </div>
 
-        <!-- Dashboard Statistics -->
-        <section class="stats">
-            <div class="stat-card">
-                <span class="stat-icon">📋</span>
-                <div>
-                    <p>Total Tasks</p>
-                    <h2 id="totalTasks">0</h2>
-                </div>
-            </div>
+        <div class="field">
+          <label for="dueDate">Due date <span class="hint">(optional)</span></label>
+          <input class="input" id="dueDate" name="dueDate" type="date">
+        </div>
 
-            <div class="stat-card">
-                <span class="stat-icon">⏳</span>
-                <div>
-                    <p>Pending Tasks</p>
-                    <h2 id="pendingTasks">0</h2>
-                </div>
-            </div>
+        <div class="field">
+          <div class="label" id="priorityLabel">Priority</div>
+          <div class="seg" role="radiogroup" aria-labelledby="priorityLabel">
+            <input type="radio" name="priority" id="pr-low" value="low">
+            <label for="pr-low" class="p-low"><span>Low</span></label>
+            <input type="radio" name="priority" id="pr-medium" value="medium" checked>
+            <label for="pr-medium" class="p-medium"><span>Medium</span></label>
+            <input type="radio" name="priority" id="pr-high" value="high">
+            <label for="pr-high" class="p-high"><span>High</span></label>
+          </div>
+        </div>
 
-            <div class="stat-card">
-                <span class="stat-icon">✅</span>
-                <div>
-                    <p>Completed Tasks</p>
-                    <h2 id="completedTasks">0</h2>
-                </div>
-            </div>
-        </section>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary" id="submitBtn">Add task</button>
+          <button type="button" class="btn btn-ghost" id="cancelBtn" hidden>Cancel</button>
+        </div>
+      </form>
+    </section>
 
-        <!-- Add / Edit Task Form -->
-        <section class="panel">
-            <h2 id="formHeading">Add a New Task</h2>
+    <!-- List -->
+    <section aria-labelledby="listTitle">
+      <h2 class="sr-only" id="listTitle">Your tasks</h2>
 
-            <form id="taskForm">
-                <div class="form-group">
-                    <label for="title">Task Title *</label>
-                    <input
-                        type="text"
-                        id="title"
-                        placeholder="e.g. Complete Java assignment"
-                        maxlength="100"
-                        required
-                    >
-                </div>
+      <div class="toolbar">
+        <div class="status-tabs" role="group" aria-label="Filter by status">
+          <button class="tab" type="button" data-status="all" aria-pressed="true">All<span class="n" id="count-all">0</span></button>
+          <button class="tab" type="button" data-status="active" aria-pressed="false">Active<span class="n" id="count-active">0</span></button>
+          <button class="tab" type="button" data-status="completed" aria-pressed="false">Completed<span class="n" id="count-completed">0</span></button>
+        </div>
 
-                <div class="form-group">
-                    <label for="description">Description</label>
-                    <textarea
-                        id="description"
-                        placeholder="Enter task details..."
-                        rows="3"
-                        maxlength="1000"
-                    ></textarea>
-                </div>
+        <div class="filters">
+          <div>
+            <label class="sr-only" for="search">Search tasks</label>
+            <input class="input" id="search" type="search" placeholder="Search title or description">
+          </div>
+          <div>
+            <label class="sr-only" for="priorityFilter">Filter by priority</label>
+            <select class="input" id="priorityFilter">
+              <option value="all">All priorities</option>
+              <option value="high">High priority</option>
+              <option value="medium">Medium priority</option>
+              <option value="low">Low priority</option>
+            </select>
+          </div>
+          <div>
+            <label class="sr-only" for="sortBy">Sort tasks</label>
+            <select class="input" id="sortBy">
+              <option value="due">Sort: Due date</option>
+              <option value="priority">Sort: Priority</option>
+              <option value="newest">Sort: Newest first</option>
+            </select>
+          </div>
+        </div>
+      </div>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="dueDate">Due Date *</label>
-                        <input type="date" id="dueDate" required>
-                    </div>
+      <ul class="list" id="taskList"></ul>
+      <div id="emptyState" hidden></div>
+    </section>
+  </div>
+</div>
 
-                    <div class="form-group">
-                        <label for="priority">Priority *</label>
-                        <select id="priority" required>
-                            <option value="Low">Low</option>
-                            <option value="Medium" selected>Medium</option>
-                            <option value="High">High</option>
-                        </select>
-                    </div>
-                </div>
+<div class="toast-region" aria-live="polite" id="toastRegion"></div>
 
-                <div class="form-actions">
-                    <button type="submit" id="submitButton" class="btn btn-primary">
-                        + Add Task
-                    </button>
-
-                    <button
-                        type="button"
-                        id="cancelButton"
-                        class="btn btn-secondary"
-                        hidden
-                    >
-                        Cancel
-                    </button>
-                </div>
-            </form>
-        </section>
-
-        <!-- Task Filters -->
-        <section class="panel">
-            <div class="task-heading">
-                <h2>My Tasks</h2>
-                <span id="taskCount" class="task-count">0 tasks</span>
-            </div>
-
-            <div class="filters">
-                <div class="form-group">
-                    <label for="statusFilter">Filter by Status</label>
-                    <select id="statusFilter">
-                        <option value="all">All Tasks</option>
-                        <option value="pending">Pending</option>
-                        <option value="completed">Completed</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="priorityFilter">Filter by Priority</label>
-                    <select id="priorityFilter">
-                        <option value="all">All Priorities</option>
-                        <option value="High">High</option>
-                        <option value="Medium">Medium</option>
-                        <option value="Low">Low</option>
-                    </select>
-                </div>
-            </div>
-
-            <div id="taskList" class="task-list"></div>
-        </section>
-
-        <footer>
-            <p>Student Task Manager &copy; 2026</p>
-        </footer>
-
-    </main>
-
+<script src="script.js"></script>
 </body>
 </html>
