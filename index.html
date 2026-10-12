@@ -25,10 +25,34 @@
             <tbody>
                 <tr>
                     <td>1</td>
-                    <td id="first"></td>
+                    <td id="first1"></td>
                     <td>+</td>
-                    <td id="second"></td>
-                    <td id="output"></td>
+                    <td id="second1"></td>
+                    <td id="sum"></td>
+                </tr>
+
+                <tr>
+                    <td>2</td>
+                    <td id="first2"></td>
+                    <td>-</td>
+                    <td id="second2"></td>
+                    <td id="difference"></td>
+                </tr>
+
+                <tr>
+                    <td>3</td>
+                    <td id="first3"></td>
+                    <td>*</td>
+                    <td id="second3"></td>
+                    <td id="multiply"></td>
+                </tr>
+
+                <tr>
+                    <td>4</td>
+                    <td id="first4"></td>
+                    <td>/</td>
+                    <td id="second4"></td>
+                    <td id="divide"></td>
                 </tr>
         </table>
 
@@ -36,12 +60,21 @@
             let a = parseInt(prompt("Enter a number A: "));
             let b = parseInt(prompt("Enter a number B: "));
 
-            // let c = a + b;
-            // document.write("The sum is: " + c);
+            document.getElementById("first1").textContent = a;
+            document.getElementById("second1").textContent = b;
+            document.getElementById("sum").textContent = "The sum is: " + (a + b);
 
-            document.getElementById("first").textContent = a;
-            document.getElementById("second").textContent = b;
-            document.getElementById("output").textContent = "The sum is: " + (a + b);
+            document.getElementById("first2").textContent = a;
+            document.getElementById("second2").textContent = b;
+            document.getElementById("difference").textContent = "The difference is: " + (a - b);
+
+            document.getElementById("first3").textContent = a;
+            document.getElementById("second3").textContent = b;
+            document.getElementById("multiply").textContent = "The multiply is: " + (a * b);
+
+            document.getElementById("first4").textContent = a;
+            document.getElementById("second4").textContent = b;
+            document.getElementById("divide").textContent = "The divide is: " + (a / b);
         </script>
     </body>
 </html>
