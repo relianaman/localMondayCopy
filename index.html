@@ -1,80 +1,149 @@
-<html>
-    <head>
-        <title>1st Page</title>
-        <link rel="stylesheet" href="style.css">
-    </head>
-    <body>
-        <ul>
-            <li><a href="#home">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#contact">Contact Us</a></li>
-        </ul>
 
-        <p>Arithmetic Operations</p>
-        
-        <table>
-            <thead>
-                <tr>
-                    <td>S No.</td>
-                    <td>First Number</td>
-                    <td>Operation</td>
-                    <td>Second Number</td>
-                    <td>Output</td>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>1</td>
-                    <td id="first1"></td>
-                    <td>+</td>
-                    <td id="second1"></td>
-                    <td id="sum"></td>
-                </tr>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Task Manager</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
 
-                <tr>
-                    <td>2</td>
-                    <td id="first2"></td>
-                    <td>-</td>
-                    <td id="second2"></td>
-                    <td id="difference"></td>
-                </tr>
+    <header class="header">
+        <div class="container header-content">
+            <div>
+                <h1>Student Task Manager</h1>
+                <p>Organize your studies. Stay on track.</p>
+            </div>
+            <span class="header-icon">📚</span>
+        </div>
+    </header>
 
-                <tr>
-                    <td>3</td>
-                    <td id="first3"></td>
-                    <td>*</td>
-                    <td id="second3"></td>
-                    <td id="multiply"></td>
-                </tr>
+    <main class="container">
 
-                <tr>
-                    <td>4</td>
-                    <td id="first4"></td>
-                    <td>/</td>
-                    <td id="second4"></td>
-                    <td id="divide"></td>
-                </tr>
-        </table>
+        <!-- Dashboard Statistics -->
+        <section class="stats">
+            <div class="stat-card">
+                <span class="stat-icon">📋</span>
+                <div>
+                    <p>Total Tasks</p>
+                    <h2 id="totalTasks">0</h2>
+                </div>
+            </div>
 
-        <script>
-            let a = parseInt(prompt("Enter a number A: "));
-            let b = parseInt(prompt("Enter a number B: "));
+            <div class="stat-card">
+                <span class="stat-icon">⏳</span>
+                <div>
+                    <p>Pending Tasks</p>
+                    <h2 id="pendingTasks">0</h2>
+                </div>
+            </div>
 
-            document.getElementById("first1").textContent = a;
-            document.getElementById("second1").textContent = b;
-            document.getElementById("sum").textContent = "The sum is: " + (a + b);
+            <div class="stat-card">
+                <span class="stat-icon">✅</span>
+                <div>
+                    <p>Completed Tasks</p>
+                    <h2 id="completedTasks">0</h2>
+                </div>
+            </div>
+        </section>
 
-            document.getElementById("first2").textContent = a;
-            document.getElementById("second2").textContent = b;
-            document.getElementById("difference").textContent = "The difference is: " + (a - b);
+        <!-- Add / Edit Task Form -->
+        <section class="panel">
+            <h2 id="formHeading">Add a New Task</h2>
 
-            document.getElementById("first3").textContent = a;
-            document.getElementById("second3").textContent = b;
-            document.getElementById("multiply").textContent = "The multiply is: " + (a * b);
+            <form id="taskForm">
+                <div class="form-group">
+                    <label for="title">Task Title *</label>
+                    <input
+                        type="text"
+                        id="title"
+                        placeholder="e.g. Complete Java assignment"
+                        maxlength="100"
+                        required
+                    >
+                </div>
 
-            document.getElementById("first4").textContent = a;
-            document.getElementById("second4").textContent = b;
-            document.getElementById("divide").textContent = "The divide is: " + (a / b);
-        </script>
-    </body>
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea
+                        id="description"
+                        placeholder="Enter task details..."
+                        rows="3"
+                        maxlength="1000"
+                    ></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="dueDate">Due Date *</label>
+                        <input type="date" id="dueDate" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="priority">Priority *</label>
+                        <select id="priority" required>
+                            <option value="Low">Low</option>
+                            <option value="Medium" selected>Medium</option>
+                            <option value="High">High</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" id="submitButton" class="btn btn-primary">
+                        + Add Task
+                    </button>
+
+                    <button
+                        type="button"
+                        id="cancelButton"
+                        class="btn btn-secondary"
+                        hidden
+                    >
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </section>
+
+        <!-- Task Filters -->
+        <section class="panel">
+            <div class="task-heading">
+                <h2>My Tasks</h2>
+                <span id="taskCount" class="task-count">0 tasks</span>
+            </div>
+
+            <div class="filters">
+                <div class="form-group">
+                    <label for="statusFilter">Filter by Status</label>
+                    <select id="statusFilter">
+                        <option value="all">All Tasks</option>
+                        <option value="pending">Pending</option>
+                        <option value="completed">Completed</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="priorityFilter">Filter by Priority</label>
+                    <select id="priorityFilter">
+                        <option value="all">All Priorities</option>
+                        <option value="High">High</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Low">Low</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="taskList" class="task-list"></div>
+        </section>
+
+        <footer>
+            <p>Student Task Manager &copy; 2026</p>
+        </footer>
+
+    </main>
+
+</body>
 </html>
