@@ -4,12 +4,42 @@
         <link rel="stylesheet" href="style.css">
     </head>
     <body>
+        <ul>
+            <li><a href="#index">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact Us</a></li>
+        </ul>
+
         <script>
             let a = parseInt(prompt("Enter a number A: "));
             let b = parseInt(prompt("Enter a number B: "));
 
-            let c = a + b;
-            document.write("The sum is: " + c);
+            // let c = a + b;
+            // document.write("The sum is: " + c);
+
+            document.getElementById("first").textContent = a;
+            document.getElementById("second").textContent = b;
+            document.getElementById("output").textContent = "The sum is: " + (a + b);
         </script>
+        
+        <table>
+            <thead>
+                <tr>
+                    <td>S No.</td>
+                    <td>First Number</td>
+                    <td>Operation</td>
+                    <td>Second Number</td>
+                    <td>Output</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td id="first"></td>
+                    <td>+</td>
+                    <td id="second"></td>
+                    <td id="output"></td>
+                </tr>
+        </table>
     </body>
 </html>
